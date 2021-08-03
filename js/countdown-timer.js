@@ -8,9 +8,10 @@ const refs = {
 };
 
 class CountdownTimer {
-  constructor({ targetDate, onTick }) {
+  constructor({ targetDate, onTick, selector }) {
     this.targetDate = targetDate;
     this.onTick = onTick;
+    this.id = selector;
 
     this.onPageLoad();
   }
@@ -33,7 +34,7 @@ class CountdownTimer {
   getTimeComponents(time) {
     const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
     const hours = this.pad(
-      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
     );
     const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
     const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
@@ -42,19 +43,19 @@ class CountdownTimer {
   }
 
   pad(value) {
-    return String(value).padStart(2, "0");
+    return String(value).padStart(2, '0');
   }
 }
 
 const timer = new CountdownTimer({
-  selector: "#timer-1", //зачем??
-  targetDate: new Date("August 08, 2021"),
+  selector: '#timer-1', //зачем??
+  targetDate: new Date('August 08, 2021'),
   onTick: updateClockface,
 });
 
-// window.addEventListener("click", timer.start.bind(timer)); //байнд не нужен?
-// document.addEventListener("DOMContentLoaded", timer.start(timer)); //как правильно?
-window.addEventListener("load", timer.start(timer));
+// window.onload = timer.start(); //для старых браузеров
+
+timer.start(); //для новых браузеров
 
 function updateClockface({ days, hours, mins, secs }) {
   refs.daysRef.textContent = `${days}`;
