@@ -7,10 +7,9 @@
 body {
   position: relative;
   background-color: #ffffff;
-  background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("./sale.jpg");
+  background-image: url("../images/sale.jpg");
 }
 
 .timer {

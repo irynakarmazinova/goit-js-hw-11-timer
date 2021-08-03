@@ -1,8 +1,6 @@
 // таймер обратного отсчета (отсчет до распродажи)
 
 const refs = {
-  // mainDivRef: document.querySelector(".timer"),
-  mainDivRef: document.getElementById("timer-1"),
   daysRef: document.querySelector('[data-value="days"]'),
   hoursRef: document.querySelector('[data-value="hours"]'),
   minsRef: document.querySelector('[data-value="mins"]'),
@@ -10,21 +8,22 @@ const refs = {
 };
 
 class CountdownTimer {
-  constructor({ deadline, onTick }) {
-    //зачем здесь деструктуризация
-    this.deadline = deadline;
-    this.onTick = onTick; //что такое онтик, пересмотреть репету?
+  constructor({ targetDate, onTick }) {
+    this.targetDate = targetDate;
+    this.onTick = onTick;
+
+    this.onPageLoad();
   }
 
-  init() {
-    const time = this.getTimeComponents(0); //зачем инит, пересмотреть репету?
+  onPageLoad() {
+    const time = this.getTimeComponents(0);
     this.onTick(time);
   }
 
   start() {
     setInterval(() => {
-      const deltaTime = this.deadline - new Date(); // Mon Aug 02 2021 22:14:43
-      // const deltaTime = this.deadline - Date.now(); // 1627931668237
+      // const deltaTime = this.targetDate - Date.now(); // 1627931668237
+      const deltaTime = this.targetDate - new Date(); // Mon Aug 02 2021 22:14:43
       const time = this.getTimeComponents(deltaTime);
 
       this.onTick(time);
@@ -48,8 +47,8 @@ class CountdownTimer {
 }
 
 const timer = new CountdownTimer({
-  selector: "#timer-1", //зачем это нужно?
-  deadline: new Date("August 08, 2021"),
+  selector: "#timer-1", //зачем??
+  targetDate: new Date("August 08, 2021"),
   onTick: updateClockface,
 });
 
@@ -66,9 +65,6 @@ function updateClockface({ days, hours, mins, secs }) {
 
 // -----------------------------------------------------------------------
 // selector - селектор плагина
-
-// когда будет вызываться таймер, класс ваш, то вы будете передавать время до которого будет распродажа, а потом будет от туда считать вниз
-// будет конечное время и текущее и надо будет выбрать разницу между конечным и текущим
 // -----------------------------------------------------------------------
 // new Date ()
 // 1) 2 авг 21:03:36

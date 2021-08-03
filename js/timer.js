@@ -1,4 +1,5 @@
 // таймер отсчет вперед
+
 const startBtn = document.querySelector("button[data-action-start]");
 const stopBtn = document.querySelector("button[data-action-stop]");
 const clockface = document.querySelector(".js-clockface");
@@ -12,6 +13,7 @@ class Timer {
     this.init();
   }
 
+  // при загрузке страницы, что бы сразу отображались цифры
   init() {
     const time = this.getTimeComponents(0);
     this.onTick(time);
@@ -68,6 +70,8 @@ class Timer {
 
 const timer = new Timer({ onTick: updateClockface });
 
+// при вызове start/stop this будет ссылаться на саму кнопку.
+// если передаешь метод объекта как коллбек в какую-то функцию, то он будет undefind/window. а если передаешь в addEventListener, то this внутри этих методов объекта будет ссылаться на DOM элемент, на котором висит этот слушатель событий, поэтому нужно привязать контекст(bind).
 startBtn.addEventListener("click", timer.start.bind(timer));
 stopBtn.addEventListener("click", timer.stop.bind(timer));
 
@@ -77,3 +81,17 @@ stopBtn.addEventListener("click", timer.stop.bind(timer));
 function updateClockface({ days, hours, mins, secs }) {
   clockface.textContent = `${days}:${hours}:${mins}:${secs}`;
 }
+
+// ----------------------------------------------------------------------------
+// плагин - это js, который натягивается на твою разметку (которая ожидает какую-то разметку, возможно, и к ней натягивается).
+
+// разница между объектом и плагином в том, что плагин - это просто класс и из него экземпляры делаются.
+
+//stop и start будут на прототипе лежать, а intervalId, isActive будут на экземпляре лежать.
+
+// класс не должен знать про обновление интерфейса, он занимается только подсчетом.
+// класс(модель данных) не должен знать про внешние функции(отрисовка интерфейса).
+
+// onTick - каждый раз когда тикает таймер.
+// this.onTick - это просто ссылка на функцию updateClockface.
+// когда вызываю this.onTick(time) - вызывается функция updateClockface в которой передается время({ days, hours, mins, secs }).
